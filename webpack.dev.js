@@ -100,16 +100,26 @@ module.exports = { //注意这里是exports不是export
              // loader: ExtractTextPlugin.extract('style-loader!css-loader?importLoaders=1!postcss-loader')
             loader: 'style-loader!css-loader?importLoaders=1!postcss-loader' //加importLoaders=1这个参数是为了让@import进来的css也自动加前缀
         },
-        {
-            test: /\.styl$/,
-            loader: 'style-loader!css-loader?!postcss-loader!stylus-loader'
-        },
+        // {
+        //     test: /\.styl$/,
+        //     loader: 'style-loader!css-loader?!postcss-loader!stylus-loader'
+        // },
+            {
+                test: /\.styl$/,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    // 'postcss-loader?sourceMap:true',
+                    { loader: 'postcss-loader', options: { sourceMap: true } },//如果不这样配置postcss-loader,它的2.0.3及以上版本要报warning：(Previous source map found, but options.sourceMap isn't set)
+                    'stylus-loader'
+                ]
+            },
         {
             test: /\.(png|jpg|gif|svg)$/i,//加了i，就是不区分大小写
             loaders: [
                 //'url-loader?limit:10000&name:assets/[name]-[hash:5].[ext]',//name属性里的assets是最终文件存放的位置
-                'url-loader?name:assets/[name]-[hash:5].[ext]',
-                'image-webpack-loader'//这个是压缩图片的loader
+                'file-loader?name:assets/[name]-[hash:5].[ext]'
+                //'image-webpack-loader'//这个是压缩图片的loader
             ]
         },
         {

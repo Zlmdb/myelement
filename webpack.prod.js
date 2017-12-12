@@ -107,7 +107,8 @@ module.exports = { //注意这里是exports不是export
             },
             {
                 test: /\.styl$/,
-                loader: 'style!css!postcss!stylus'
+                //loader: 'style!css!postcss!stylus'
+                loader: 'style-loader!css-loader?!postcss-loader!stylus-loader'
             },
             // {
             //     test: /\.html$/,
@@ -127,13 +128,13 @@ module.exports = { //注意这里是exports不是export
             {
                 test: /\.(png|jpg|gif|svg)$/i,//加了i，就是不区分大小写
                 loaders: [
-                    'url-loader?limit:20000&name:assets/[name]-[hash:5].[ext]',//name属性里的assets是最终文件存放的位置
-                    'image-webpack'//这个是压缩图片的loader
+                    'url-loader?name:assets/[name]-[hash:5].[ext]'//name属性里的assets是最终文件存放的位置
+                    //'image-webpack-loader'//这个是压缩图片的loader
                 ]
             },
              {
                 test:/\.(ttf|eot|woff|svg)$/,
-                loader:'file-loader',
+                 loader:'url-loader',
                 query:{
                     name:'assets/[name]-[hash:5].[ext]'
                 }
