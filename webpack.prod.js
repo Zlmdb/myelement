@@ -73,7 +73,8 @@ module.exports = { //注意这里是exports不是export
     output: { //输出目录
         path: __dirname + "/build", //打包后的js文件存放的地方
         // publicPath: '/',
-        filename: "js/[name]-[hash].js", //打包后的js文件名
+        filename: "js/[name]-[chunkhash].js", //打包后的js文件名
+        chunkFilename: '[name].[chunkhash].js'
         //publicPath:'/'
     },
     module: {
@@ -107,7 +108,8 @@ module.exports = { //注意这里是exports不是export
             },
             {
                 test: /\.styl$/,
-                loader: 'style!css!postcss!stylus'
+                //loader: 'style!css!postcss!stylus'
+                loader: 'style-loader!css-loader?!postcss-loader!stylus-loader'
             },
             // {
             //     test: /\.html$/,
@@ -127,13 +129,13 @@ module.exports = { //注意这里是exports不是export
             {
                 test: /\.(png|jpg|gif|svg)$/i,//加了i，就是不区分大小写
                 loaders: [
-                    'url-loader?limit:20000&name:assets/[name]-[hash:5].[ext]',//name属性里的assets是最终文件存放的位置
-                    'image-webpack'//这个是压缩图片的loader
+                    'url-loader?name:assets/[name]-[hash:5].[ext]'//name属性里的assets是最终文件存放的位置
+                    //'image-webpack-loader'//这个是压缩图片的loader
                 ]
             },
              {
                 test:/\.(ttf|eot|woff|svg)$/,
-                loader:'file-loader',
+                 loader:'url-loader',
                 query:{
                     name:'assets/[name]-[hash:5].[ext]'
                 }
@@ -157,6 +159,15 @@ module.exports = { //注意这里是exports不是export
         new ExtractTextPlugin({
             filename: 'css/[name].css',
             allChunks: false
+        }),
+        //但是现在又有一个问题了。你随便修改代码一处，例如Home.js，随便改变个字，你发现home.xxx.js名字变化的同时，
+        //vendor.xxx.js名字也变了。这不行啊。这和没拆分不是一样一样了吗？我们本意是vendor.xxx.js名字永久不变，一直缓存在用户本地的。
+        //官方文档推荐了一个插件HashedModuleIdsPlugin
+        new webpack.HashedModuleIdsPlugin(),
+        //现在你打包，修改代码再试试，是不是名字不变啦？错了，现在打包，我发现名字还是变了，经过比对文
+        //档，我发现还要加一个runtime代码抽取，
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'runtime'
         })
     ].concat(htmlPlugin())
 };

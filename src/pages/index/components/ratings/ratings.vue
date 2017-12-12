@@ -1,15 +1,17 @@
 <template>
   <div>
     <p>{{ msg }}</p>
-    <img src="../../momo.jpg" alt="">
+    <img v-bind:src="pic" alt="">
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  var pic = require('../../momo.jpg') 
    export default {
      data () {
     return {
-      msg: '  I am ratings'
+      msg: '  I am ratings',
+      pic: pic 
     }
   }
    }

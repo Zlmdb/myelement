@@ -1,6 +1,7 @@
 <template>
   <div>
     <p>{{ msg }}</p>
+    <!-- <img src="${require('../../guarantee.png')}" alt=""> -->
     <img src="../../guarantee.png" alt="">
   </div>
 </template>
