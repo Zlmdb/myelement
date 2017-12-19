@@ -118,7 +118,7 @@ module.exports = { //注意这里是exports不是export
             test: /\.(png|jpg|gif|svg)$/i,//加了i，就是不区分大小写
             loaders: [
                 'url-loader?limit=10000&name=assets/[name]-[hash:5].[ext]',//name属性里的assets是最终文件存放的位置
-                // 'file-loader?name=assets/[name]-[hash:5].[ext]'
+                // 'file-loader?name=assets/[name]-[hash:5].[ext]',
                 //'image-webpack-loader'//这个是压缩图片的loader
             ]
         },
